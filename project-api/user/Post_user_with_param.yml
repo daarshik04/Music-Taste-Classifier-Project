@@ -1,0 +1,20 @@
+info:
+  name: Post_user_with_param
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://127.0.0.1:8080/api/users?name=Deep
+  params:
+    - name: name
+      value: Deep
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

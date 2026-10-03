@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: spotify-taste-intelligence
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/music_taste_classifier
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  spotify:
+    client-id: ${SPOTIFY_CLIENT_ID}
+    client-secret: ${SPOTIFY_CLIENT_SECRET}
+    redirect-uri: http://127.0.0.1:8080/api/spotify/callback
+    authorization-url: https://accounts.spotify.com/authorize
+    token-url: https://accounts.spotify.com/api/token
+    api-base-url: https://api.spotify.com/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
