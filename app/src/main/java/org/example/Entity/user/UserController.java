@@ -1,9 +1,7 @@
-package org.example.Controller;
+package org.example.Entity.user;
 
 import java.util.List;
 
-import org.example.Entity.user.User;
-import org.example.Entity.user.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

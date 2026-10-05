@@ -4,13 +4,12 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
-import java.util.concurrent.LinkedBlockingDeque;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 
-import com.google.common.net.MediaType;
 
 @Service
 public class SpotifyAuthService {
@@ -29,6 +28,7 @@ public class SpotifyAuthService {
                 +"?response_type=code"
                 +"&client_id=" +encode(properties.getClientId())
                 +"&scope=" +encode(scope)
+                + "&redirect_uri=" + encode(properties.getRedirectUri())
                 +"&state=" +encode(state);
     }
 
@@ -54,8 +54,9 @@ public class SpotifyAuthService {
         
         form.add("grant_type", "authorization_code");
         form.add("code", code);
-        form.add("redirect_url", properties.getRedirectUri());
+        form.add("redirect_uri", properties.getRedirectUri());
 
+        // because Spotify's token endpoint expects a POST request.
         return client.post()
             .uri(properties.getTokenUrl())
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
