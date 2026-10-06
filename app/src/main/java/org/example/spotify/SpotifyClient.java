@@ -18,7 +18,7 @@ public class SpotifyClient {
     public SpotifyTracksResponse getSavedTracks(String accessToken,int offset, int limit){
         return client.get()
                  .uri(uriBuilder -> uriBuilder
-                                   .path("me/tracks")
+                                   .path("/me/tracks")
                                    .queryParam("limit",limit)
                                    .queryParam("offset", offset)
                                    .build())
