@@ -3,6 +3,8 @@ package org.example.spotify;
 import org.example.Entity.album.AlbumRepository;
 import org.example.Entity.artist.ArtistRepository;
 import org.example.Entity.track.Track;
+import org.example.Entity.album.Album;
+import org.example.Entity.artist.Artist;
 import org.example.Entity.track.TrackRepository;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,34 @@ public class SpotifyImportService {
             );
 
             trackRepository.save(track);
-        }     
+
+            if(spotifyTrack.getAlbum() != null){
+
+                SpotifyTrackItem.Album album = spotifyTrack.getAlbum();
+
+                albumRepository.save(
+                    new Album(
+                        album.getId(),
+                        album.getName()
+                    )
+                );
+            }
+
+            if(spotifyTrack.getArtists() != null){
+
+                for(SpotifyTrackItem.Artist artist : spotifyTrack.getArtists()){
+
+                    artistRepository.save(
+                        new Artist(
+                            artist.getId(),
+                            artist.getName()
+                        )
+                    );
+                }
+            }
+        }    
+        
+        return response.getItems().size();
     }
     
     
