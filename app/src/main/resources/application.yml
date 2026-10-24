@@ -23,6 +23,9 @@ spotify:
     token-url: https://accounts.spotify.com/api/token
     api-base-url: https://api.spotify.com/v1
 
+app:
+  frontend-url: http://localhost:5173    
+
 management:
   endpoints:
     web:

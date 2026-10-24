@@ -55,10 +55,14 @@ public class SpotifyLibraryController {
 
     @GetMapping("/debug/session")
     public Map<String, Object> debugSession(HttpSession session) {
+
+        boolean hasToken = session.getAttribute("spotify_access_token")!= null;
+
+        System.out.println("debug session ID: "+ session.getId());
+        System.out.println("Has access token: " + hasToken);
     return Map.of(
         "sessionId", session.getId(),
-        "hasAccessToken",
-        session.getAttribute("spotify_access_token") != null
+        "hasAccessToken", hasToken
     );
 }
 
