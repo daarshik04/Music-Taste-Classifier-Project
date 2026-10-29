@@ -24,7 +24,7 @@ spotify:
     api-base-url: https://api.spotify.com/v1
 
 app:
-  frontend-url: http://localhost:5173    
+  frontend-url: http://127.0.0.1:5173    
 
 management:
   endpoints:

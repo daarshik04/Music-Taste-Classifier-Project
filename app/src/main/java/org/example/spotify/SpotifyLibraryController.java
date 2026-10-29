@@ -48,7 +48,7 @@ public class SpotifyLibraryController {
             );
         }
 
-        int imported = spotifyImportService.importFirstPage(accessToken);
+        int imported = spotifyImportService.importAllTracks(accessToken);
 
         return "Imported " + imported +" tracks";
     }

@@ -28,56 +28,67 @@ public class SpotifyImportService {
         this.albumRepository = albumRepository;
     }
 
-    public int importFirstPage(String accessToken){
-        SpotifyTracksResponse response = spotifyClient.getSavedTracks(
-            accessToken,
-             0, 
-             50);
+    public int importAllTracks(String accessToken){
 
-        for (SpotifyTrackItem item: response.getItems()){
+        int offset = 0;
+        int limit = 50;
+        int fetched = 0;
 
-            SpotifyTrackItem.Track spotifyTrack = item.getTrack();
-
-            if(spotifyTrack == null){
-                continue;
-            }
-
-            Track track = new Track(
-                spotifyTrack.getId(),
-                spotifyTrack.getName(),
-                spotifyTrack.getUri()
+        while(true){
+            SpotifyTracksResponse response = spotifyClient.getSavedTracks(
+                accessToken, offset, limit
             );
 
-            trackRepository.save(track);
+            if (response == null || response.getItems() ==null || response.getItems().isEmpty()){
+                break;
+            }
 
-            if(spotifyTrack.getAlbum() != null){
+            for(SpotifyTrackItem item : response.getItems()){
 
-                SpotifyTrackItem.Album album = spotifyTrack.getAlbum();
+                SpotifyTrackItem.Track spotifyTrack =item.getTrack();
 
-                albumRepository.save(
-                    new Album(
-                        album.getId(),
-                        album.getName()
+                if(spotifyTrack == null || spotifyTrack.getId() == null){
+                    continue;
+                }
+
+                trackRepository.save(
+                    new Track(
+                        spotifyTrack.getId(),
+                        spotifyTrack.getName(),
+                        spotifyTrack.getUri()
                     )
                 );
-            }
 
-            if(spotifyTrack.getArtists() != null){
+                if(spotifyTrack.getAlbum() != null && spotifyTrack.getAlbum().getId() != null){
 
-                for(SpotifyTrackItem.Artist artist : spotifyTrack.getArtists()){
+                    var album = spotifyTrack.getAlbum();
 
-                    artistRepository.save(
-                        new Artist(
-                            artist.getId(),
-                            artist.getName()
-                        )
+                    albumRepository.save(
+                        new Album(album.getId(), album.getName())
                     );
                 }
+
+                if(spotifyTrack.getArtists() != null){
+                    for(var artist: spotifyTrack.getArtists()){
+                        if(artist.getId() != null){
+                            artistRepository.save(
+                                new Artist(artist.getId(), artist.getName())
+                            );
+                        }
+                    }
+                }
             }
-        }    
-        
-        return response.getItems().size();
-    }
-    
+
+            int pageSize = response.getItems().size();
+            fetched += pageSize;
+            offset += pageSize;
+
+            if(offset >= response.getTotal() || pageSize < limit){
+                break;
+            }
+        }
+
+        return fetched;
+    }    
     
 }
