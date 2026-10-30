@@ -12,7 +12,7 @@ public class Album {
     @Id 
     private String spotifyId;
 
-    @Column 
+    @Column(nullable = false)
     private String name;
 
     protected Album(){}
